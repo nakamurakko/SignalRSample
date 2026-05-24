@@ -1,0 +1,39 @@
+{
+  // IntelliSense を使用して利用可能な属性を学べます。
+  // 既存の属性の説明をホバーして表示します。
+  // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // 開発モードで App を実行する。
+      "name": "Start Local Dev",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm start"
+    },
+    {
+      // Chrome を起動する。
+      "name": "Launch Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      },
+      // Start Local Dev が準備できるまで、起動を遅らせる。
+      "preLaunchTask": "Delay startup"
+    }
+  ],
+  "compounds": [
+    {
+      // "Start Local Dev"、 "Launch Chrome" を実行する。
+      "name": "Debug all",
+      "configurations": [
+        "Start Local Dev",
+        "Launch Chrome"
+      ],
+      "stopAll": true
+    }
+  ]
+}

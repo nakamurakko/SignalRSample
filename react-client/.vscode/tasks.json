@@ -1,0 +1,21 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // 起動を遅らせる。
+      "label": "Delay startup",
+      "type": "shell",
+      "command": "timeout 10",
+      // https://code.visualstudio.com/docs/editor/tasks#_output-behavior
+      "presentation": {
+        "close": true,
+        "focus": false,
+        "panel": "new",
+        "reveal": "silent",
+        "showReuseMessage": false
+      }
+    }
+  ]
+}
