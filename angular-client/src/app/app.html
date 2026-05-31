@@ -1,17 +1,19 @@
-<mat-form-field>
-  <mat-label>User name</mat-label>
-  <input matInput
-         placeholder="User name"
-         [(ngModel)]="userName" />
-</mat-form-field>
-<mat-form-field>
-  <mat-label>Message</mat-label>
-  <input matInput
-         placeholder="Message"
-         [(ngModel)]="inputText" />
-</mat-form-field>
-<button matButton="elevated"
-        (click)="sendMessage()">Send message</button>
+<div class="full-width">
+  <mat-form-field class="form-field-width-stretch" subscriptSizing="dynamic">
+    <mat-label>User name</mat-label>
+    <input matInput
+           placeholder="User name"
+           [(ngModel)]="userName" />
+  </mat-form-field>
+  <mat-form-field class="form-field-width-stretch" subscriptSizing="dynamic">
+    <mat-label>Message</mat-label>
+    <input matInput
+           placeholder="Message"
+           [(ngModel)]="inputText" />
+  </mat-form-field>
+  <button class="button-width" matButton="elevated"
+          (click)="sendMessage()">Send message</button>
+</div>
 
 <table mat-table
        [dataSource]="messages()">
