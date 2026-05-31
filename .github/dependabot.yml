@@ -10,6 +10,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "npm" # See documentation for possible values
+    directory: "/angular-client" # Location of package manifests
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "npm" # See documentation for possible values
     directory: "/react-client" # Location of package manifests
     schedule:
       interval: "monthly"
