@@ -9,25 +9,25 @@ import { IMessageInfo } from './data-types/IMessageInfo';
 
 export default function App(): React.JSX.Element {
 
-  const [connection, setConnection] = useState<signalr.HubConnection | null>(null);
+  const [chatConnection, setChatConnection] = useState<signalr.HubConnection | null>(null);
 
   const [userName, setUserName] = useState<string>('');
   const [inputText, setInputText] = useState<string>('');
   const [messages, setMessages] = useState<IMessageInfo[]>([]);
 
   useEffect(() => {
-    const chatConnection = new signalr.HubConnectionBuilder()
+    const connection = new signalr.HubConnectionBuilder()
       .withUrl('http://localhost:5180/chat')
       .withAutomaticReconnect()
       .build();
 
-    setConnection(chatConnection);
+    setChatConnection(connection);
 
-    chatConnection.start()
+    connection.start()
       .then(() => {
         console.log('Connected to SignalR hub');
 
-        chatConnection.on('receivedMessage', (userName: string, message: string) => {
+        connection.on('receivedMessage', (userName: string, message: string) => {
           console.log(`Message received from ${userName}: ${message}`);
           setMessages(prev => [...prev, { userName, message }]);
         });
@@ -37,14 +37,14 @@ export default function App(): React.JSX.Element {
       });
 
     return (() => {
-      chatConnection?.stop();
+      connection?.stop();
     });
 
   }, []);
 
   const handleSendMessage = async (): Promise<void> => {
-    if ((connection?.state === signalr.HubConnectionState.Connected) && inputText.trim()) {
-      await connection.send('sendMessage', userName, inputText);
+    if ((chatConnection?.state === signalr.HubConnectionState.Connected) && inputText.trim()) {
+      await chatConnection.send('sendMessage', userName, inputText);
       setInputText('');
     }
   };
