@@ -24,26 +24,50 @@ import { IMessageInfo } from '../data-types/IMessageInfo';
 })
 export class App implements OnInit, OnDestroy {
 
-  private chatConnection: signalr.HubConnection | null = null;
-
   protected readonly title = signal<string>('angular-client');
 
+  private timerConnection: signalr.HubConnection | null = null;
+  public currentDateTime = signal<string>('');
+
+  private chatConnection: signalr.HubConnection | null = null;
   public userName = model<string>('');
   public inputText = model<string>('');
   public messages = model<IMessageInfo[]>([]);
 
   public ngOnInit(): void {
-    const connection = new signalr.HubConnectionBuilder()
+    // Initialize the timer connection
+    const timerConn = new signalr.HubConnectionBuilder()
+      .withUrl('http://localhost:5180/timer')
+      .withAutomaticReconnect()
+      .build();
+
+    this.chatConnection = timerConn;
+
+    defer(() => timerConn.start())
+      .subscribe({
+        next: () => {
+          timerConn.on('sendCurrentDateTime', (currentDateTime: string) => {
+            this.currentDateTime.set(currentDateTime);
+          });
+        },
+        error: (e) => {
+          console.error('Error connecting to SignalR hub:', e);
+        }
+      });
+
+
+    // Initialize the chat connection
+    const chatConn = new signalr.HubConnectionBuilder()
       .withUrl('http://localhost:5180/chat')
       .withAutomaticReconnect()
       .build();
 
-    this.chatConnection = connection;
+    this.chatConnection = chatConn;
 
-    defer(() => connection.start())
+    defer(() => chatConn.start())
       .subscribe({
         next: () => {
-          connection.on('receivedMessage', (userName: string, message: string) => {
+          chatConn.on('receivedMessage', (userName: string, message: string) => {
             console.log(`Message received from ${userName}: ${message}`);
             this.messages.update((prev) => [...prev, { userName, message }]);
           });
@@ -55,13 +79,14 @@ export class App implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.timerConnection?.stop();
     this.chatConnection?.stop();
   }
 
   public sendMessage(): void {
-    const connection = this.chatConnection;
-    if (!!connection && connection.state === signalr.HubConnectionState.Connected && !!this.inputText().trim()) {
-      defer(() => connection.send('sendMessage', this.userName(), this.inputText()))
+    const chatConn = this.chatConnection;
+    if (!!chatConn && chatConn.state === signalr.HubConnectionState.Connected && !!this.inputText().trim()) {
+      defer(() => chatConn.send('sendMessage', this.userName(), this.inputText()))
         .subscribe({
           next: () => {
             this.inputText.set('');

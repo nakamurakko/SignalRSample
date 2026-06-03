@@ -9,11 +9,13 @@ body {
   margin: 0;
 }
 
-.full-width {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  margin-left: 1rem;
+.button-width {
+  flex-shrink: 0;
+  margin-right: 1rem;
+}
+
+.div-padding-bottom {
+  padding-bottom: 0.5rem;
 }
 
 .form-field-width-stretch {
@@ -22,7 +24,9 @@ body {
   overflow: auto;
 }
 
-.button-width {
-  flex-shrink: 0;
-  margin-right: 1rem;
+.full-width {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-left: 1rem;
 }

@@ -9,12 +9,42 @@ import { IMessageInfo } from './data-types/IMessageInfo';
 
 export default function App(): React.JSX.Element {
 
-  const [chatConnection, setChatConnection] = useState<signalr.HubConnection | null>(null);
+  const [currentDateTime, setCurrentDateTime] = useState<string>('');
 
+  const [chatConnection, setChatConnection] = useState<signalr.HubConnection | null>(null);
   const [userName, setUserName] = useState<string>('');
   const [inputText, setInputText] = useState<string>('');
   const [messages, setMessages] = useState<IMessageInfo[]>([]);
 
+  /**
+   * Initialize the timer connection
+   */
+  useEffect(() => {
+    const connection = new signalr.HubConnectionBuilder()
+      .withUrl('http://localhost:5180/timer')
+      .withAutomaticReconnect()
+      .build();
+
+    connection.start()
+      .then(() => {
+        console.log('Connected to SignalR hub');
+
+        connection.on('sendCurrentDateTime', (currentDateTime: string) => {
+          setCurrentDateTime(currentDateTime);
+        });
+      })
+      .catch((error) => {
+        console.error('Error connecting to SignalR hub:', error);
+      });
+
+    return (() => {
+      connection?.stop();
+    });
+  }, []);
+
+  /**
+   * Initialize the chat connection
+   */
   useEffect(() => {
     const connection = new signalr.HubConnectionBuilder()
       .withUrl('http://localhost:5180/chat')
@@ -39,7 +69,6 @@ export default function App(): React.JSX.Element {
     return (() => {
       connection?.stop();
     });
-
   }, []);
 
   const handleSendMessage = async (): Promise<void> => {
@@ -52,6 +81,10 @@ export default function App(): React.JSX.Element {
   return (
     <>
       <Container>
+        <div className="div-padding-bottom">
+          <span>現在時刻 : {currentDateTime}</span>
+        </div>
+
         <InputGroup>
           <Form.Control
             placeholder='User name'

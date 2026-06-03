@@ -1,4 +1,5 @@
 ﻿using SignalRServer.Hubs;
+using SignalRServer.Hubs.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddCors(action =>
 });
 
 builder.Services.AddSignalR();
+builder.Services.AddHostedService<TimerWorker>();
 
 var app = builder.Build();
 
@@ -33,6 +35,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 
+app.MapHub<TimerHub>("/timer");
 app.MapHub<ChatHub>("/chat");
 
 app.Run();
