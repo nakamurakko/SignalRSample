@@ -7,7 +7,7 @@
       // 起動を遅らせる。
       "label": "Delay startup",
       "type": "shell",
-      "command": "timeout 10",
+      "command": "timeout 1",
       // https://code.visualstudio.com/docs/editor/tasks#_output-behavior
       "presentation": {
         "close": true,

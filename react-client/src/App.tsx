@@ -5,7 +5,7 @@ import { Button, Container, Form, InputGroup, Table } from 'react-bootstrap';
 
 import * as signalr from '@microsoft/signalr';
 
-import { IMessageInfo } from './data-types/IMessageInfo';
+import type { IMessageInfo } from './data-types/IMessageInfo';
 
 export default function App(): React.JSX.Element {
 

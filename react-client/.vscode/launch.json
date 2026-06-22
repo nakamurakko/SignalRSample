@@ -9,14 +9,14 @@
       "name": "Start Local Dev",
       "type": "node-terminal",
       "request": "launch",
-      "command": "npm start"
+      "command": "npm run dev"
     },
     {
       // Chrome を起動する。
       "name": "Launch Chrome",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000",
+      "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}/src",
       "sourceMapPathOverrides": {
         "webpack:///src/*": "${webRoot}/*"
